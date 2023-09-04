@@ -43,6 +43,14 @@ class EmojiArtDocumentTableViewController: UITableViewController {
         tableView.reloadData()
     }
     
+//    override func viewWillLayoutSubviews() {
+//        super.viewWillLayoutSubviews()
+//        if splitViewController?.preferredDisplayMode != .oneOverSecondary {
+//            splitViewController?.preferredDisplayMode = .oneOverSecondary
+//        }
+//    }
+//    
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
