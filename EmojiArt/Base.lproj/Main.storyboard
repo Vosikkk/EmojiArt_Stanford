@@ -76,16 +76,22 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9y4-vG-9Cp">
                                 <rect key="frame" x="0.0" y="74" width="1045.5" height="930"/>
                                 <subviews>
-                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v0c-4K-M9p">
+                                    <scrollView verifyAmbiguity="off" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v0c-4K-M9p">
                                         <rect key="frame" x="0.0" y="0.0" width="1045.5" height="930"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" priority="250" constant="930" id="LvH-ei-dEL"/>
+                                            <constraint firstAttribute="width" priority="250" constant="1045" id="bh7-Bt-LMQ"/>
+                                        </constraints>
                                     </scrollView>
                                 </subviews>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="v0c-4K-M9p" secondAttribute="bottom" id="IHz-1O-XPL"/>
-                                    <constraint firstItem="v0c-4K-M9p" firstAttribute="leading" secondItem="9y4-vG-9Cp" secondAttribute="leading" id="K6c-fh-4bG"/>
-                                    <constraint firstItem="v0c-4K-M9p" firstAttribute="top" secondItem="9y4-vG-9Cp" secondAttribute="top" id="b8B-3J-LuW"/>
-                                    <constraint firstAttribute="trailing" secondItem="v0c-4K-M9p" secondAttribute="trailing" id="pgD-di-rAx"/>
+                                    <constraint firstItem="v0c-4K-M9p" firstAttribute="centerX" secondItem="9y4-vG-9Cp" secondAttribute="centerX" id="DD0-vi-tQk"/>
+                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="v0c-4K-M9p" secondAttribute="bottom" id="IHz-1O-XPL"/>
+                                    <constraint firstItem="v0c-4K-M9p" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="9y4-vG-9Cp" secondAttribute="leading" id="K6c-fh-4bG"/>
+                                    <constraint firstItem="v0c-4K-M9p" firstAttribute="centerY" secondItem="9y4-vG-9Cp" secondAttribute="centerY" id="QCw-4D-TG6"/>
+                                    <constraint firstItem="v0c-4K-M9p" firstAttribute="top" relation="greaterThanOrEqual" secondItem="9y4-vG-9Cp" secondAttribute="top" id="b8B-3J-LuW"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="v0c-4K-M9p" secondAttribute="trailing" id="pgD-di-rAx"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -102,6 +108,8 @@
                     <connections>
                         <outlet property="dropZone" destination="9y4-vG-9Cp" id="Lun-oZ-hky"/>
                         <outlet property="scrollView" destination="v0c-4K-M9p" id="kd2-Iw-5Rm"/>
+                        <outlet property="scrollViewHeight" destination="LvH-ei-dEL" id="Jaj-UI-OhK"/>
+                        <outlet property="scrollViewWidth" destination="bh7-Bt-LMQ" id="voc-8G-sxt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -128,6 +136,9 @@
         </scene>
     </scenes>
     <resources>
+        <systemColor name="opaqueSeparatorColor">
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
