@@ -28,6 +28,16 @@ class EmojiArtViewController: UIViewController {
     @IBOutlet weak var scrollViewWidth: NSLayoutConstraint!
     
     
+    @IBOutlet weak var emojiCollectionView: UICollectionView! {
+        didSet {
+            emojiCollectionView.dataSource = self
+            emojiCollectionView.delegate = self
+            emojiCollectionView.dragDelegate = self
+        }
+    }
+    
+    
+    
     var emojiArtView = EmojiArtView()
     
     var imageFetcher: ImageFetcher!
@@ -50,6 +60,12 @@ class EmojiArtViewController: UIViewController {
             
         }
         
+    }
+    
+    var emojis = "😀🧚‍♀️🐝🦬🌧️🏀🚗✈️🎈💣🏨🌈".map{ String($0) }
+    
+    private var font: UIFont {
+        return UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(40.0))
     }
     
 }
@@ -86,7 +102,7 @@ extension EmojiArtViewController: UIDropInteractionDelegate {
     
 }
 
-extension EmojiArtViewController:  UIScrollViewDelegate {
+extension EmojiArtViewController: UIScrollViewDelegate {
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return emojiArtView
@@ -96,5 +112,31 @@ extension EmojiArtViewController:  UIScrollViewDelegate {
         scrollViewHeight.constant = scrollView.contentSize.height
         scrollViewWidth.constant = scrollView.contentSize.width
     }
+    
+}
+
+extension EmojiArtViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDragDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        <#code#>
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return emojis.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EmojiCell", for: indexPath)
+        
+        if let emojiCell = cell as? EmojiCollectionViewCell {
+            let text = NSAttributedString(string: emojis[indexPath.item], attributes: [.font:font])
+            emojiCell.label.attributedText = text
+        }
+        
+        return cell
+    }
+    
     
 }
