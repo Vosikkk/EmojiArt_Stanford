@@ -10,7 +10,7 @@ import UIKit
 class EmojiArtView: UIView {
 
    
-    var backgroundImage: UIImage? { didSet { setNeedsDisplay() } }
+    var backgroundImage: UIImage? { didSet { setNeedsDisplay()} }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
