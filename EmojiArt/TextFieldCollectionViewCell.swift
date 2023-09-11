@@ -14,6 +14,9 @@ class TextFieldCollectionViewCell: UICollectionViewCell {
             textField.delegate = self
         }
     }
+    
+    var resingationHandler: (() -> Void)?
+    
 }
 
 
@@ -24,6 +27,10 @@ extension TextFieldCollectionViewCell: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        resingationHandler?()
     }
     
 }
