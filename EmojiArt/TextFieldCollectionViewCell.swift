@@ -16,7 +16,6 @@ class TextFieldCollectionViewCell: UICollectionViewCell {
     }
     
     var resingationHandler: (() -> Void)?
-    
 }
 
 
@@ -32,5 +31,4 @@ extension TextFieldCollectionViewCell: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         resingationHandler?()
     }
-    
 }

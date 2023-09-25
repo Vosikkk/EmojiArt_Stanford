@@ -37,18 +37,79 @@ class EmojiArtViewController: UIViewController {
         }
     }
     
+    @IBAction func save(_ sender: UIBarButtonItem) {
+        if let json = emojiArt?.json {
+            if let url = try? FileManager.default.url(for: .documentDirectory,
+                                                      in: .userDomainMask,
+                                                      appropriateFor: nil,
+                                                      create: true).appending(path:"Untitled.json") {
+                do {
+                    try json.write(to: url)
+                    print("saved successfully")
+                } catch let error {
+                    print("couldn't save \(error)")
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+        // MARK: Model
+    
+    var emojiArt: EmojiArt? {
+        get {
+            if let url = emojiArtBackGroundImage.url {
+                let emojis = emojiArtView.subviews.compactMap{ $0 as? UILabel }.compactMap{ EmojiArt.EmojiInfo(label: $0 )}
+                return EmojiArt(url: url, emojis: emojis)
+            }
+            return nil
+        }
+        set {
+            emojiArtBackGroundImage = (nil, nil)
+            emojiArtView.subviews.compactMap{ $0 as? UILabel }.forEach{ $0.removeFromSuperview() }
+            if let url = newValue?.url {
+                imageFetcher = ImageFetcher(fetch: url, handler: { url, image in
+                    DispatchQueue.main.async {
+                        self.emojiArtBackGroundImage = (url, image)
+                        newValue?.emojis.forEach {
+                            let attributedText = $0.text.attributedString(withTextStyle: .body, ofSize: CGFloat($0.size))
+                            self.emojiArtView.addLabel(with: attributedText, centeredAt: CGPoint(x: $0.x, y: $0.y))
+                        }
+                    }
+                })
+            }
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let url = try? FileManager.default.url(for: .documentDirectory,
+                                                  in: .userDomainMask,
+                                                  appropriateFor: nil,
+                                                  create: true).appending(path:"Untitled.json") {
+            if let jsonData = try? Data(contentsOf: url) {
+                emojiArt = EmojiArt(json: jsonData)
+            }
+        }
+    }
+    
     var emojiArtView = EmojiArtView()
     
     var imageFetcher: ImageFetcher!
     
-    var emojiArtBackGroundImage: UIImage? {
+    private var _emojiArtImageURL: URL?
+    
+    var emojiArtBackGroundImage: (url: URL?, image: UIImage?) {
         get {
-            return emojiArtView.backgroundImage
+            return (_emojiArtImageURL, emojiArtView.backgroundImage)
         }
         set {
+            _emojiArtImageURL = newValue.url
             scrollView?.zoomScale = 1.0
-            emojiArtView.backgroundImage = newValue
-            let size = newValue?.size ?? CGSize.zero
+            emojiArtView.backgroundImage = newValue.image
+            let size = newValue.image?.size ?? CGSize.zero
             emojiArtView.frame = CGRect(origin: CGPoint.zero, size: size)
             scrollView?.contentSize = size
             scrollViewHeight?.constant = size.height
@@ -97,7 +158,7 @@ extension EmojiArtViewController: UIDropInteractionDelegate {
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
         imageFetcher = ImageFetcher() { (url, image) in
             DispatchQueue.main.async {
-                self.emojiArtBackGroundImage = image
+                self.emojiArtBackGroundImage = (url, image)
             }
         }
         session.loadObjects(ofClass: NSURL.self) { nsurls in
@@ -252,6 +313,20 @@ extension EmojiArtViewController: UICollectionViewDropDelegate {
                     }
                 }
             }
+        }
+    }
+}
+
+extension EmojiArt.EmojiInfo {
+    
+    init?(label: UILabel) {
+        if let attributedText = label.attributedText, let font = attributedText.font {
+            x = Int(label.center.x)
+            y = Int(label.center.y)
+            text = attributedText.string
+            size = Int(font.pointSize)
+        } else {
+            return nil
         }
     }
 }
